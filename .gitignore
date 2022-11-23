@@ -26,3 +26,5 @@ venv.bak/
 .spyproject
 
 .idea
+
+lab1/titanic/.hw_api_key
