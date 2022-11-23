@@ -3,6 +3,7 @@ import os
 #import great_expectations as ge
 #import hopsworks
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
@@ -51,10 +52,18 @@ print(titanic_df.isnull().sum()) # it worked
 
 # Map to numeric values (gender)
 categories = {"female": 1, "male": 0}
-titanic_df['Sex']= titanic_df['Sex'].map(categories)
+titanic_df['Sex']= titanic_df['Sex'].replace(categories)
 
 # Check that all columns are numerical
 print(titanic_df.dtypes)
+
+
+print(titanic_df.head(5))
+
+bins = [-np.infty, 20, 25, 29, 30, 40, np.infty]
+titanic_df['Age'] = pd.cut(x=titanic_df['Age'], bins=bins, labels=False)
+
+print(titanic_df.head(5))
 
 # Normalize the data so that the model converges faster 
 # convergence = a state when the loss is around the final value
