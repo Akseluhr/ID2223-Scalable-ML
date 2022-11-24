@@ -25,6 +25,6 @@ titanic_df['Fare'] = titanic_df['Fare'].fillna(-1)
 titanic_fg = fs.get_or_create_feature_group(
     name="titanic_modal",
     version=1,
-    primary_key=["PassengerId"],
+    primary_key=["PassengerId", "Age", "Sex", "Pclass", "Fare"],
     description="Titanic dataset")
 titanic_fg.insert(titanic_df, write_options={"wait_for_job": False})
