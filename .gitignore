@@ -21,10 +21,6 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
-.spyderproject
-.spyproject
-
 .idea
 
 lab1/titanic/.hw_api_key
