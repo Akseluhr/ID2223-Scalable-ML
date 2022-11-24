@@ -22,7 +22,7 @@ After running this pipeline, the features from the feature store are read. We fe
 This module is for checking the health of our model by feeding unobserved instances to the model. We do this by creating an artificial instance and append it to the feature group in Hopswork. 
 
 ### Batch inference pipeline
-The task for this module is to run the model on a user defined basis (as a job), and afterwards make predictions on the data collected during this time interval by feature pipeline daily. Currently, we run it whenever a new instance is added (for the titanic pipeline) (when ? abdullah), but this can be adjusted as of the job schedule (not sure about this). The predictions are run using the specified model from the model registry, and the prediction is compared to the real value in the GUI. The recent predictions are summarized in a confusion matrix. 
+The task for this module is to run the model on a user defined basis (as a job). This pipeline is for making predictions on the batch data collected from the feature group from hopsworks and also show histroical performance of our model along with confusion matrix. This pipeline runs on a batch data which also includes the new synthetic passenger. The output shows the predicted and the actual label of the synthetic passenger data. The values get updated with each execution. This pipeline is scheduled as a job on Modal running once per day.
 
 ## Setup
 1. Create an account on [Hopswork](https://www.hopsworks.ai/) and generate an API key.
