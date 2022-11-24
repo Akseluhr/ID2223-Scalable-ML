@@ -37,10 +37,10 @@ variable secret.
 _User interface links (Hugging Face)_
 - Dashboard
     - https://huggingface.co/spaces/akseluhr/iris-monitoring
-    - https://huggingface.co/spaces/abdullah/iris-monitoring
+    - https://huggingface.co/spaces/Abdullah1428/iris-monitoring
 - Interactive
     - https://huggingface.co/spaces/akseluhr/iris
-    - https://huggingface.co/spaces/abdullah/iris
+    - https://huggingface.co/spaces/Abdullah1428/Iris
 - Code
     - Source code in `./iris`
 
@@ -49,10 +49,10 @@ _User interface links (Hugging Face)_
 _User interface links (Hugging Face)_
 - Dashboard
     - https://huggingface.co/spaces/akseluhr/titanic-monitoring
-    - https://huggingface.co/spaces/abdullah/titanic-monitoring
+    - https://huggingface.co/spaces/Abdullah1428/titanic-monitoring
 - Interactive
     - https://huggingface.co/spaces/akseluhr/titanic
-    - https://huggingface.co/spaces/abdullah/titanic
+    - https://huggingface.co/spaces/Abdullah1428/titanic
 - Code
     - Source code in `./titanic`
 
