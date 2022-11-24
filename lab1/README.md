@@ -70,7 +70,7 @@ An initial exploratory analysis indicated relevant features to the target variab
 </p>
 
 ### Data preperation
-We filled the missing values for age with the mean for this column. Furthermore, we binned the values (really not sure about the motivation behind binning). After a 85/15 split of the data, we normalized all values to the same scale between 0-1 as it is recommended to enhance the model's accuracy.
+We filled the missing values for age with the mean for this column and also binned the values for categorical representation. After a 85/15 split of the data, we normalized all values to the same scale between 0-1 as it is recommended to enhance the model's accuracy.
 
 ### Hyper parameter tuning & model training
 Before training the model (we used a RandomForestClassifier form scikit-learn), we did a coarse/random grid search and a refined grid search for finding the parameters. This grid search uses a cross validation technique (5 folds) to evaluate the performance for each model. The best parameters were ultimately selected for training the final model. 
