@@ -19,7 +19,7 @@ In this pipeline, reading data from a source (e.g. from an API call or locally) 
 After running this pipeline, the features from the feature store are read. We fetch a feature view to retrieve the target/class values if it exists, otherwise we create a new feature view and get the class values. Subsequently, the data is split, a model is trained and its performance is evaluated. The model and its performance is then stored for further usage of other modules. 
 
 ### Feature pipeline daily
-This module is for checking the health of our model by feeding unobserved instances to the model. We do this by creating an artificial instance and append it to the feature group in Hopswork. 
+This pipeline is for checking the health of our model by feeding unobserved instances to the model. We do this by creating an artificial instance and append it to the feature group in Hopsworks. We create a synthetic passenger and the values are generated at random and added to the feature group in Hopsworks.
 
 ### Batch inference pipeline
 The task for this module is to run the model on a user defined basis (as a job). This pipeline is for making predictions on the batch data collected from the feature group from hopsworks and also show histroical performance of our model along with confusion matrix. This pipeline runs on a batch data which also includes the new synthetic passenger. The output shows the predicted and the actual label of the synthetic passenger data. The values get updated with each execution. This pipeline is scheduled as a job on Modal running once per day.
