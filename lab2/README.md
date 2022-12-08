@@ -34,6 +34,7 @@ About lab
 
 ## Results
 
+![2500-instances](https://user-images.githubusercontent.com/50402197/206474496-21791370-5119-4f9e-94f7-f63853c60ba1.PNG)
 
 ## Improvement discussion
 
