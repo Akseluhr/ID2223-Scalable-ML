@@ -1,6 +1,6 @@
 # ID2223 - [Lab 2](https://github.com/ID2223KTH/id2223kth.github.io/tree/master/assignments/lab2). 
 
-In this lab, we fine tuned the pretrained the [whisper-small]("https://huggingface.co/openai/whisper-small") model based on [this example notebook]("https://colab.research.google.com/github/sanchit-gandhi/notebooks/blob/main/fine_tune_whisper.ipynb") with swedish audio files. The result is a space on Huggingface where the demo app transcribes .mp3 files using one out of two trained models from this assignment. In the demo app, you can use a microphone, drop a file or paste a Youtube URL for transcribition. 
+In this lab, we fine tuned the pretrained the [whisper-small](https://huggingface.co/openai/whisper-small) model based on [this example notebook](https://colab.research.google.com/github/sanchit-gandhi/notebooks/blob/main/fine_tune_whisper.ipynb) with swedish audio files. The result is a space on Huggingface where the demo app transcribes .mp3 files using one out of two trained models from this assignment. In the demo app, you can use a microphone, drop a file or paste a Youtube URL for transcribition. 
 
 ## Approach
 
