@@ -43,7 +43,7 @@ In this lab, we fine tuned the pretrained the [whisper-small]("https://huggingfa
 ### Data-centric
 
 - We proved that adding more data decreases the WER score (32 form example notebook vs 21), already after 300 steps of training. However, there was a high increase in training time. 
-- We note, however, that only half of an epoch was executed. 
+- Furthermore, we note that only half of an epoch was executed. 
 
 ### Model-centric
 
