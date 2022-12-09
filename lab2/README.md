@@ -49,8 +49,6 @@ In this lab, we fine tuned the pretrained the [whisper-small](https://huggingfac
 
 - We added a minor hyperparameter tuning example notebook (did not run it) as a POC to demonstrate our understanding of how hyperparameter tuning works and how to implement it with the Trainer Api. If we ran this example notebook, we note that the hyperparameter search for a model trained on a larger dataset most probably will look different since this model most likely has found different patterns (hence using different hyperparameters after tuning), compared to our small example only using 200 training instances. Besides fine tuning whisper-small, no other whisper model was fine tuned in this project. The finetuning process can be described as the larger model to finetune, the longer training time but the better results. 
 
-## Gardio UI
-
 ## Links
 * [Gardio UI of model 1](https://huggingface.co/spaces/Akseluhr/whisper-se-auhr)
 * [Model 1 reporsitory (~27 WER)](https://huggingface.co/Akseluhr/whisper-small-sv-SE-auhr-v2)
