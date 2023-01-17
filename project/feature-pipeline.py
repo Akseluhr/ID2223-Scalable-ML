@@ -5,6 +5,9 @@ from time import sleep, time
 from concurrent.futures import ThreadPoolExecutor
 import random
 import hopsworks
+import warnings
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 project = hopsworks.login()
 fs = project.get_feature_store()
@@ -44,25 +47,26 @@ def get_btc_price():
 
         sleep(1/FREQUNCY)
 
-def upload_to_hopsworks():
+def upload_to_hopsworks(first=True):
     while True:
           
         btc_df = df_initial.append(pd.DataFrame(list(zip(btc_price, timestamp)), columns=['btc_price', 'timestamp']))
-        version = 1
+
         # keeps the 50 most recent records
-        if len(btc_df) > 50:
-            btc_df = btc_df.drop(btc_df.index[0:len(btc_df)-50]).reset_index(drop=True)
-            version +=1
-            btc_fg = fs.get_or_create_feature_group(
-                name="btc_modal",
-                version=version,
-                primary_key=["btc_price", "timestamp"],
-                description="Btc dataset")
-            btc_fg.insert(btc_df, write_options={"wait_for_job": False})
+      #  if len(btc_df) > 20:
+      #  btc_df = btc_df.drop(btc_df.index[0:len(btc_df)-20]).reset_index(drop=True)
+    
+        
+        if len(btc_df) > 5:        
+            btc_fg = fs.get_or_create_feature_group( # 
+                   name="btc_modal",
+                   version=1)
+            btc_fg.insert(btc_df, storage="online", write_options={"wait_for_job": False})
+        
         print(btc_df)
         
         # Every 60 seconds we upload our new DF to hopsworks
-        sleep(60/FREQUNCY)
+        sleep(5/FREQUNCY)
 '''
 def get_hash_rate():
 	while True:
@@ -73,8 +77,16 @@ def get_hash_rate():
 '''
 
 if __name__ == "__main__":
-	executor = ThreadPoolExecutor(2)
-	for func in [get_btc_price, upload_to_hopsworks]:
-		executor.submit(func)
+    # Delete the most recent FG (outdated data)
+    '''
+    try:
+        previous_btc_fg = fs.get_feature_group('btc_modal', version=1)
+        previous_btc_fg.delete()
+    except:
+    '''
 
-	executor.shutdown(wait=True)
+    executor = ThreadPoolExecutor(2)
+    for func in [get_btc_price, upload_to_hopsworks]:
+        executor.submit(func)
+        
+    executor.shutdown(wait=True)
