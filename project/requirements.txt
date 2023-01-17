@@ -1,0 +1,6 @@
+
+hopsworks
+modal-client
+gradio
+yfinance
+pandas_datareader
