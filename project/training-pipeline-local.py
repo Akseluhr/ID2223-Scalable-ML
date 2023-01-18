@@ -2,6 +2,7 @@ import os
 
 import hopsworks
 import pandas as pd
+import math
 
 import seaborn as sns
 from hsml.schema import Schema
@@ -21,15 +22,37 @@ fs = project.get_feature_store()
 
 try:
     feature_view = fs.get_feature_view(name="btc_modal_2", version=1)
+    feature_df, labels = feature_view.get_training_data(training_dataset_version=1)
 except:
-    titanic_fg = fs.get_feature_group(name="btc_modal_2", version=1)
-    query = titanic_fg.select_all()
+    btc_fg = fs.get_feature_group(name="btc_modal_2", version=1)
+    query = btc_fg.select_all()
     feature_view = fs.create_feature_view(name="btc_modal_2",
                                           version=1,
                                           description="Read from brc dataset",
                                           labels=["close"],
                                           query=query)
-print(feature_view)
+    version, job = feature_view.create_training_data(
+        description = 'btc new training',
+        data_format = 'csv',
+        write_options = {"wait_for_job": False}
+    )
+    feature_df, label = feature_view.get_training_data(training_dataset_version=1)
+
+print(feature_df)
+print(labels)
+feature_df = feature_df.sort_values(by=["date"], ascending=[True]).reset_index(drop=True)
+
+print(feature_df)
+
+
+train_size = math.floor(len(feature_df)*0.85) # 85% training data
+test_size = math.floor(len(feature_df)*0.15) 
+
+print(train_size)
+print(test_size)
+#train = feature_df.iloc[0:ceil(len(feature_df)*0.9)]
+#test = feature_df.iloc[2250:len(data)]
+
 start_time_train = '2016-01-01 00:00:00'
 end_time_train = '2021-12-31 00:00:00'
 
@@ -38,12 +61,22 @@ end_time_test = '2023-01-18 00:00:00'
 # you can also pass dates as datetime objects
 
 # get training data
-X_train, X_test, y_train, y_test = feature_view.train_test_split(
+td_version, td_job = feature_view.create_train_test_split(
     train_start=start_time_train,
     train_end=end_time_train,
     test_start=start_time_test,
-    test_end=end_time_test
+    test_end=end_time_test,
+    data_format= 'csv',
+    write_options = {"wait_for_job": True}
 )
+ 
+X_train, X_test, y_train, y_test = feature_view.get_train_test_split(td_version)
+
+X_train.head(5)
+X_test.head()
+y_train.head()
+y_test.head()
+
 #model = RandomForestClassifier(bootstrap=True, max_depth=None, max_features='auto', min_samples_leaf=1, min_samples_split=10, n_estimators=20)
 #model.fit(X_train, y_train.values.ravel())
 
