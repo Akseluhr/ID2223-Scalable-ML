@@ -17,6 +17,11 @@ def feature_daily():
     btc_df = pdr.get_data_yahoo('BTC-USD', start=today_date)
     btc_df.drop(columns=['Adj Close'], inplace=True)
 
+    btc_df['Dayofyear'] = btc_df.index.dayofyear
+    btc_df['Month'] = btc_df.index.month
+    btc_df['Year'] = btc_df.index.year
+    btc_df['Date'] = btc_df.index.strftime('%Y-%m-%d %H:%M:%S')
+
     project = hopsworks.login()
     fs = project.get_feature_store()
 
