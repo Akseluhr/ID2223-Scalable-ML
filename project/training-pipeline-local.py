@@ -3,10 +3,14 @@ import os
 import hopsworks
 import pandas as pd
 import math
+from sklearn.metrics import mean_absolute_error
 
 import seaborn as sns
 from hsml.schema import Schema
 from hsml.model_schema import ModelSchema
+import xgboost as xgb
+import joblib
+
 
 # Creating time series features
 def create_features(df, label=None):
@@ -42,48 +46,52 @@ print(feature_df)
 print(labels)
 feature_df = feature_df.sort_values(by=["date"], ascending=[True]).reset_index(drop=True)
 
+feature_df.drop(columns=['date'], inplace=True)
 print(feature_df)
 
-
 train_size = math.floor(len(feature_df)*0.85) # 85% training data
-test_size = math.floor(len(feature_df)*0.15) 
 
-print(train_size)
-print(test_size)
-#train = feature_df.iloc[0:ceil(len(feature_df)*0.9)]
-#test = feature_df.iloc[2250:len(data)]
 
-start_time_train = '2016-01-01 00:00:00'
-end_time_train = '2021-12-31 00:00:00'
+X_train = feature_df.iloc[0:train_size]
+X_test = feature_df.iloc[train_size:len(feature_df)]
 
-start_time_test = '2022-01-01 00:00:00'
-end_time_test = '2023-01-18 00:00:00'
-# you can also pass dates as datetime objects
+print(X_train.columns)
+print(X_test.columns)
+y_train = labels.iloc[0:train_size]
+y_test = labels.iloc[train_size:len(feature_df)]
 
-# get training data
-td_version, td_job = feature_view.create_train_test_split(
-    train_start=start_time_train,
-    train_end=end_time_train,
-    test_start=start_time_test,
-    test_end=end_time_test,
-    data_format= 'csv',
-    write_options = {"wait_for_job": True}
+reg = xgb.XGBRegressor(n_estimators=3000, early_stopping=15, learning_rate=0.005, max_depth=8, verbose=True)
+reg.fit(X_train, y_train)
+y_pred = reg.predict(X_test)
+
+err = mean_absolute_error(y_test, y_pred)
+rmse = math.sqrt(err)
+print("MSE:", err)
+print("RMSE:", rmse)
+
+mr = project.get_model_registry()
+model_dir = "model"
+if not os.path.isdir(model_dir):
+    os.mkdir(model_dir)
+
+joblib.dump(reg, model_dir + "/btc_model.pkl")
+
+
+# Specify the schema of the model's input/output using the features (X_train) and labels (y_train)
+input_schema = Schema(X_train)
+output_schema = Schema(y_train)
+model_schema = ModelSchema(input_schema, output_schema)
+
+# Create an entry in the model registry that includes the model's name, desc, metrics
+btc_pred_model = mr.python.create_model(
+    name="btc_model",
+    metrics={"RMSE": rmse},
+    model_schema=model_schema,
+    description="Btc closing price predictor"
 )
- 
-X_train, X_test, y_train, y_test = feature_view.get_train_test_split(td_version)
 
-X_train.head(5)
-X_test.head()
-y_train.head()
-y_test.head()
-
-#model = RandomForestClassifier(bootstrap=True, max_depth=None, max_features='auto', min_samples_leaf=1, min_samples_split=10, n_estimators=20)
-#model.fit(X_train, y_train.values.ravel())
-
-# Evaluate model performance using the features from the test set (X_test)
-#y_pred = model.predict(X_test)
-
-
+# Upload to hopsworks
+btc_pred_model.save(model_dir)
 '''
 # Compare predictions (y_pred) with the labels in the test set (y_test)
 metrics = classification_report(y_test, y_pred, output_dict=True)
