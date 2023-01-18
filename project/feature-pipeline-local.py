@@ -11,10 +11,14 @@ btc_df = pdr.get_data_yahoo('BTC-USD', start='2016-01-01')
 
 btc_df.drop(columns=['Adj Close'], inplace=True)
 
+btc_df['Dayofyear'] = btc_df.index.dayofyear
+btc_df['Month'] = btc_df.index.month
+btc_df['Year'] = btc_df.index.year
+btc_df['Date'] = btc_df.index.strftime('%Y-%m-%d %H:%M:%S')
 
-titanic_fg = fs.get_or_create_feature_group(
+btc_fg = fs.get_or_create_feature_group(
     name="btc_modal_2",
     version=1,
-    primary_key=["Open", "High", "Low", "Close", "Volume"],
+    primary_key=["Date"], #all but target
     description="yahoo btc dataset")
-titanic_fg.insert(btc_df, write_options={"wait_for_job": False})
+btc_fg.insert(btc_df, write_options={"wait_for_job": False})
