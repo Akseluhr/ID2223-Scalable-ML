@@ -44,22 +44,28 @@ except:
 
 print(feature_df)
 print(labels)
+feature_df['labels'] = labels # Need to sort labels as well. 
 feature_df = feature_df.sort_values(by=["date"], ascending=[True]).reset_index(drop=True)
 
 feature_df.drop(columns=['date'], inplace=True)
 print(feature_df)
 
-train_size = math.floor(len(feature_df)*0.85) # 85% training data
+train_size = math.floor(len(feature_df)*0.90) # 85% training data
 
 
 X_train = feature_df.iloc[0:train_size]
 X_test = feature_df.iloc[train_size:len(feature_df)]
 
-print(X_train.columns)
-print(X_test.columns)
-y_train = labels.iloc[0:train_size]
-y_test = labels.iloc[train_size:len(feature_df)]
+y_train = feature_df['labels'].iloc[0:train_size]
+y_test = feature_df['labels'].iloc[train_size:len(feature_df)]
 
+X_train.drop(columns=['labels'], inplace=True)
+X_test.drop(columns=['labels'], inplace=True)
+print(X_train)
+print(X_test)
+print('.............................')
+print(y_train)
+print(y_test)
 reg = xgb.XGBRegressor(n_estimators=3000, early_stopping=15, learning_rate=0.005, max_depth=8, verbose=True)
 reg.fit(X_train, y_train)
 y_pred = reg.predict(X_test)
