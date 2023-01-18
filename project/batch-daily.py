@@ -1,6 +1,6 @@
 import modal
 
-LOCAL = False
+LOCAL = True
 
 
 def batch_btc():
@@ -19,17 +19,25 @@ def batch_btc():
     project = hopsworks.login()
     fs = project.get_feature_store()
 
+    feature_group = fs.get_feature_group(name="btc_modal_2", version=1)
+
     # get model and make prediction for latest instance
     mr = project.get_model_registry()
     model = mr.get_model("btc_model", version=1)
     model_dir = model.download()
     model = joblib.load(model_dir + "/btc_model.pkl")
 
-    feature_view = fs.get_feature_view(name="btc_modal_2", version=1)
-    batch_data = feature_view.get_batch_data()
+    offset = 5
+    X_pred = feature_group.read().tail(offset)
+    print("5 days instance: \n{}".format(X_pred))
 
-    y_pred = model.predict(batch_data)
+    # predict and get latest (daily) feature
+    y_pred = model.predict(X_pred.drop(columns=['close', 'date']))
+    print("Prediction: {}".format(y_pred[0]))
 
+    prediction_date = X_pred.iloc[0]['date']
+    prediction_date = prediction_date.date()
+    print("Prediction date: {}".format(prediction_date))
 
 if not LOCAL:
     stub = modal.Stub()

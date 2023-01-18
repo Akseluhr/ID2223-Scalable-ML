@@ -9,6 +9,7 @@ def feature_daily():
     import hopsworks
     from pandas_datareader import data as pdr
     import yfinance as yf
+    import pandas as pd
 
     # add the new data here.
     today_date = datetime.datetime.today()
@@ -21,6 +22,7 @@ def feature_daily():
     btc_df['Month'] = btc_df.index.month
     btc_df['Year'] = btc_df.index.year
     btc_df['Date'] = btc_df.index.strftime('%Y-%m-%d %H:%M:%S')
+    btc_df['Date'] = pd.to_datetime(btc_df['Date'])
 
     project = hopsworks.login()
     fs = project.get_feature_store()
@@ -33,7 +35,7 @@ if not LOCAL:
     stub = modal.Stub()
     image = modal.Image.debian_slim().pip_install(
         ["hopsworks==3.0.4", "joblib", "seaborn", "scikit-learn", "xgboost", "dataframe-image", "datetime",
-         "yfinance", "pandas_datareader"])
+         "yfinance", "pandas", "pandas_datareader"])
 
     @stub.function(image=image, schedule=modal.Period(days=1), secret=modal.Secret.from_name("HOPSWORKS_API_KEY"))
     # @stub.function(image=image, secret=modal.Secret.from_name("HOPSWORKS_API_KEY"))

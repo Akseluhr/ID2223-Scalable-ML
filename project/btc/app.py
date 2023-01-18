@@ -26,8 +26,7 @@ def predict():
     btc_df['Month'] = btc_df.index.month
     btc_df['Year'] = btc_df.index.year
     # btc_df['Date'] = btc_df.index.strftime('%Y-%m-%d %H:%M:%S')
-
-    price = model.predict(btc_df.drop(columns=['close']))[0]
+    price = model.predict(btc_df.drop(columns=['Close']))[0]
     return [today, price]
 
 
