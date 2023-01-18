@@ -28,6 +28,8 @@ def batch_btc():
     feature_view = fs.get_feature_view(name="btc_modal_2", version=1)
     batch_data = feature_view.get_batch_data()
 
+    y_pred = model.predict(batch_data)
+
 
 if not LOCAL:
     stub = modal.Stub()
