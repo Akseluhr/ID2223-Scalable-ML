@@ -23,7 +23,7 @@ def batch_btc():
 
     # get model and make prediction for latest instance
     mr = project.get_model_registry()
-    model = mr.get_model("btc_model", version=5)
+    model = mr.get_model("btc_model", version=1)
     model_dir = model.download()
     model = joblib.load(model_dir + "/btc_model.pkl")
     
